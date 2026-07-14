@@ -94,6 +94,15 @@ namespace CmCli
                         ExportKit(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
                         break;
 
+                    case "export-crests":
+                        if (args.Length < 6)
+                        {
+                            Console.WriteLine("Usage: CmCli.exe export-crests <db_path> <xml_path> <fifa_dir> <team_id> <output_dir>");
+                            Environment.Exit(1);
+                        }
+                        ExportCrests(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
+                        break;
+
                     default:
                         Console.WriteLine($"ERROR: Unknown command: {command}");
                         PrintUsage();
@@ -122,6 +131,7 @@ namespace CmCli
             Console.WriteLine("  export-all <db_path> <xml_path> <output_dir>                         Exports all tables to a directory");
             Console.WriteLine("  import-all <db_path> <xml_path> <input_dir> <output_db_path>          Imports all tables from a directory and saves DB");
             Console.WriteLine("  export-kit <db_path> <xml_path> <fifa_dir> <team_id> <output_dir>    Exports team kits (PNG) from FIFA 16 directory");
+            Console.WriteLine("  export-crests <db_path> <xml_path> <fifa_dir> <team_id> <output_dir> Exports team logos/crests (PNG) from FIFA 16 directory");
         }
 
         static void ListTables(string dbPath, string xmlPath)
@@ -431,6 +441,63 @@ namespace CmCli
                 }
             }
             Console.WriteLine("Kit export completed successfully.");
+        }
+
+        static void ExportCrests(string dbPath, string xmlPath, string fifaDir, int teamId, string outputDir)
+        {
+            Console.WriteLine("Initializing FifaEnvironment...");
+            FifaEnvironment.Initialize(16, fifaDir);
+            FifaEnvironment.FifaDbFileName = dbPath;
+            FifaEnvironment.FifaXmlFileName = xmlPath;
+            
+            Console.WriteLine("Opening FAT archives...");
+            FifaEnvironment.OpenFat();
+            
+            Console.WriteLine("Opening Database...");
+            if (!FifaEnvironment.OpenFifaDb())
+            {
+                Console.WriteLine("ERROR: Failed to open FIFA database.");
+                return;
+            }
+            
+            if (!Directory.Exists(outputDir))
+            {
+                Directory.CreateDirectory(outputDir);
+            }
+            
+            Console.WriteLine($"Searching for team {teamId}...");
+            Team team = (Team)FifaEnvironment.Teams.SearchId(teamId);
+            if (team == null)
+            {
+                Console.WriteLine($"ERROR: Team with ID {teamId} not found.");
+                return;
+            }
+            
+            Console.WriteLine($"Found Team: {team.DatabaseName}");
+            
+            // Extract standard light crests
+            ExtractAndSaveCrest(team.GetCrest(), "crest_standard", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest50(), "crest_50x50", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest32(), "crest_32x32", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest16(), "crest_16x16", teamId, outputDir);
+            
+            // Extract dark crests
+            ExtractAndSaveCrest(team.GetCrestDark(), "crest_dark_standard", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest50Dark(), "crest_dark_50x50", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest32Dark(), "crest_dark_32x32", teamId, outputDir);
+            ExtractAndSaveCrest(team.GetCrest16Dark(), "crest_dark_16x16", teamId, outputDir);
+
+            Console.WriteLine("Crests export completed successfully.");
+        }
+
+        static void ExtractAndSaveCrest(Bitmap crest, string name, int teamId, string outputDir)
+        {
+            if (crest != null)
+            {
+                string file = Path.Combine(outputDir, $"team_{teamId}_{name}.png");
+                crest.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                Console.WriteLine($"Saved crest: {file}");
+            }
         }
     }
 }
