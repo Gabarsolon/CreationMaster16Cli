@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{A2F6155A-2CD7-46AE-B3EC-AD0DCA94817E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CreationMaster</RootNamespace>
+    <AssemblyName>CreationMaster16</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>CreationMaster16.ico</ApplicationIcon>
+    <StartupObject>CreationMaster.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AudioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AudioForm.Designer.cs">
+      <DependentUpon>AudioForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BallForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BallForm.Designer.cs">
+      <DependentUpon>BallForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CompetitionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompetitionForm.Designer.cs">
+      <DependentUpon>CompetitionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CountryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CountryForm.Designer.cs">
+      <DependentUpon>CountryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormationForm.Designer.cs">
+      <DependentUpon>FormationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameGraphicForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameGraphicForm.Designer.cs">
+      <DependentUpon>GameGraphicForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlovesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GlovesForm.Designer.cs">
+      <DependentUpon>GlovesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KitForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KitForm.Designer.cs">
+      <DependentUpon>KitForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LeagueForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LeagueForm.Designer.cs">
+      <DependentUpon>LeagueForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListViewItemComparer.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagerForm.Designer.cs">
+      <DependentUpon>ManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyHairColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyHairColor.Designer.cs">
+      <DependentUpon>ModifyHairColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewspapersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewspapersForm.Designer.cs">
+      <DependentUpon>NewspapersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Patch.cs" />
+    <Compile Include="PatchCreatorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatchCreatorForm.Designer.cs">
+      <DependentUpon>PatchCreatorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PatchedObject.cs" />
+    <Compile Include="PatchLoaderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatchLoaderForm.Designer.cs">
+      <DependentUpon>PatchLoaderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlayerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayerForm.Designer.cs">
+      <DependentUpon>PlayerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RefereeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RefereeForm.Designer.cs">
+      <DependentUpon>RefereeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShoesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShoesForm.Designer.cs">
+      <DependentUpon>ShoesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SquadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SquadForm.Designer.cs">
+      <DependentUpon>SquadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StadiumForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StadiumForm.Designer.cs">
+      <DependentUpon>StadiumForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeamForm.Designer.cs">
+      <DependentUpon>TeamForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TournamentWizard.Designer.cs">
+      <DependentUpon>TournamentWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TvForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TvForm.Designer.cs">
+      <DependentUpon>TvForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UgcForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UgcForm.Designer.cs">
+      <DependentUpon>UgcForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebBrowserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebBrowserForm.Designer.cs">
+      <DependentUpon>WebBrowserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebPatchLoader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebPatchLoader.Designer.cs">
+      <DependentUpon>WebPatchLoader.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AudioForm.resources" />
+    <EmbeddedResource Include="BallForm.resources" />
+    <EmbeddedResource Include="CompetitionForm.resources" />
+    <EmbeddedResource Include="CountryForm.resources" />
+    <EmbeddedResource Include="FormationForm.resources" />
+    <EmbeddedResource Include="GameGraphicForm.resources" />
+    <EmbeddedResource Include="GlovesForm.resources" />
+    <EmbeddedResource Include="KitForm.resources" />
+    <EmbeddedResource Include="LeagueForm.resources" />
+    <EmbeddedResource Include="MainForm.resources" />
+    <EmbeddedResource Include="ManagerForm.resources" />
+    <EmbeddedResource Include="ModifyHairColor.resources" />
+    <EmbeddedResource Include="NewspapersForm.resources" />
+    <EmbeddedResource Include="PatchCreatorForm.resources" />
+    <EmbeddedResource Include="PatchLoaderForm.resources" />
+    <EmbeddedResource Include="PlayerForm.resources" />
+    <EmbeddedResource Include="Properties\Resources.resources" />
+    <EmbeddedResource Include="RefereeForm.resources" />
+    <EmbeddedResource Include="ShoesForm.resources" />
+    <EmbeddedResource Include="SquadForm.resources" />
+    <EmbeddedResource Include="StadiumForm.resources" />
+    <EmbeddedResource Include="TeamForm.resources" />
+    <EmbeddedResource Include="TournamentWizard.resources" />
+    <EmbeddedResource Include="TvForm.resources" />
+    <EmbeddedResource Include="UgcForm.resources" />
+    <EmbeddedResource Include="WebBrowserForm.resources" />
+    <EmbeddedResource Include="WebPatchLoader.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FifaControls\FifaControls.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA94817F}</Project>
+      <Name>FifaControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FifaLibrary16\FifaLibrary16.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948180}</Project>
+      <Name>FifaLibrary16</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948181}</Project>
+      <Name>ICSharpCode.SharpZipLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.DirectX.Direct3D\Microsoft.DirectX.Direct3D.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948182}</Project>
+      <Name>Microsoft.DirectX.Direct3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mscorlib\mscorlib.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948186}</Project>
+      <Name>mscorlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System\System.csproj">
+      <Project>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948187}</Project>
+      <Name>System</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

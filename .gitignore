@@ -1,0 +1,9 @@
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+ThirdParty/Microsoft.DirectX.dll
+ThirdParty/Microsoft.DirectX.Direct3D.dll
+ThirdParty/zlib.net.dll

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{A2F6155A-2CD7-46AE-B3EC-AD0DCA948180}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FifaLibrary</RootNamespace>
+    <AssemblyName>FifaLibrary16</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.DirectX">
+      <HintPath>..\ThirdParty\Microsoft.DirectX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.Direct3D">
+      <HintPath>..\ThirdParty\Microsoft.DirectX.Direct3D.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zlib.net">
+      <HintPath>..\ThirdParty\zlib.net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adboard.cs" />
+    <Compile Include="AdboardList.cs" />
+    <Compile Include="Audio.cs" />
+    <Compile Include="Ball.cs" />
+    <Compile Include="BallList.cs" />
+    <Compile Include="BhFile.cs" />
+    <Compile Include="BhFileReference.cs" />
+    <Compile Include="CareerCommonName.cs" />
+    <Compile Include="CareerCommonNameList.cs" />
+    <Compile Include="CareerFile.cs" />
+    <Compile Include="CareerFirstName.cs" />
+    <Compile Include="CareerFirstNameList.cs" />
+    <Compile Include="CareerFormation.cs" />
+    <Compile Include="CareerFormationList.cs" />
+    <Compile Include="CareerLastName.cs" />
+    <Compile Include="CareerLastNameList.cs" />
+    <Compile Include="CmsDataSet.cs" />
+    <Compile Include="CmSponsor.cs" />
+    <Compile Include="CompetitionSettings.cs" />
+    <Compile Include="Compobj.cs" />
+    <Compile Include="CompobjList.cs" />
+    <Compile Include="Confederation.cs" />
+    <Compile Include="ConfederationList.cs" />
+    <Compile Include="Country.cs" />
+    <Compile Include="CountryList.cs" />
+    <Compile Include="DbFile.cs" />
+    <Compile Include="DbReader.cs" />
+    <Compile Include="DbWriter.cs" />
+    <Compile Include="DdsFile.cs" />
+    <Compile Include="DxtBlock.cs" />
+    <Compile Include="ECompressionMode.cs" />
+    <Compile Include="EEndOfCompetitionRule.cs" />
+    <Compile Include="EFifaObjects.cs" />
+    <Compile Include="EImageType.cs" />
+    <Compile Include="ELeaguePrestige.cs" />
+    <Compile Include="EPlayingDirection.cs" />
+    <Compile Include="EPlayingIntensity.cs" />
+    <Compile Include="EQualifyingRule.cs" />
+    <Compile Include="ERole.cs" />
+    <Compile Include="ERuleApplicartionTime.cs" />
+    <Compile Include="FI.cs" />
+    <Compile Include="FieldComparer.cs" />
+    <Compile Include="FieldDescriptor.cs" />
+    <Compile Include="FifaBigFile.cs" />
+    <Compile Include="FifaEnvironment.cs" />
+    <Compile Include="FifaFat.cs" />
+    <Compile Include="FifaFile.cs" />
+    <Compile Include="FifaFileHeader.cs" />
+    <Compile Include="FifaPlatform.cs" />
+    <Compile Include="FifaUtil.cs" />
+    <Compile Include="Formation.cs" />
+    <Compile Include="FormationList.cs" />
+    <Compile Include="FreeAgent.cs" />
+    <Compile Include="FreeAgentList.cs" />
+    <Compile Include="Fsh.cs" />
+    <Compile Include="FshImage.cs" />
+    <Compile Include="FshSection.cs" />
+    <Compile Include="GenericHead.cs" />
+    <Compile Include="GkGloves.cs" />
+    <Compile Include="GkGlovesList.cs" />
+    <Compile Include="Gloves.cs" />
+    <Compile Include="GlovesList.cs" />
+    <Compile Include="GraphicUtil.cs" />
+    <Compile Include="Group.cs" />
+    <Compile Include="GroupList.cs" />
+    <Compile Include="HuffmannTree.cs" />
+    <Compile Include="IdArrayList.cs" />
+    <Compile Include="IdObject.cs" />
+    <Compile Include="IdObjectComparer.cs" />
+    <Compile Include="IdString.cs" />
+    <Compile Include="ImageDir.cs" />
+    <Compile Include="InitTeam.cs" />
+    <Compile Include="InitTeamList.cs" />
+    <Compile Include="Kit.cs" />
+    <Compile Include="KitFile.cs" />
+    <Compile Include="KitList.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="League.cs" />
+    <Compile Include="LeagueList.cs" />
+    <Compile Include="Localization.cs" />
+    <Compile Include="Manager.cs" />
+    <Compile Include="Matrix3x3.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="MipMap.cs" />
+    <Compile Include="Model3D.cs" />
+    <Compile Include="MowingPattern.cs" />
+    <Compile Include="MowingPatternList.cs" />
+    <Compile Include="MultiClub.cs" />
+    <Compile Include="MultiClubList.cs" />
+    <Compile Include="NameDictionary.cs" />
+    <Compile Include="NameFont.cs" />
+    <Compile Include="NameFontList.cs" />
+    <Compile Include="Nation.cs" />
+    <Compile Include="NationList.cs" />
+    <Compile Include="Net.cs" />
+    <Compile Include="NetList.cs" />
+    <Compile Include="Newspaper.cs" />
+    <Compile Include="NumberFont.cs" />
+    <Compile Include="NumberFontList.cs" />
+    <Compile Include="OnlineFile.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="PlayerList.cs" />
+    <Compile Include="PlayerName.cs" />
+    <Compile Include="PlayerNames.cs" />
+    <Compile Include="PlayingRole.cs" />
+    <Compile Include="Police.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rank.cs" />
+    <Compile Include="RankList.cs" />
+    <Compile Include="RawImage.cs" />
+    <Compile Include="Record.cs" />
+    <Compile Include="RecordComparer.cs" />
+    <Compile Include="Referee.cs" />
+    <Compile Include="RefereeList.cs" />
+    <Compile Include="RegistryInfo.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="RoleList.cs" />
+    <Compile Include="Roster.cs" />
+    <Compile Include="RosterComparer.cs" />
+    <Compile Include="Rx3File.cs" />
+    <Compile Include="Rx3FileDescriptor.cs" />
+    <Compile Include="Rx3Header.cs" />
+    <Compile Include="Rx3Image.cs" />
+    <Compile Include="Rx3ImageDirectory.cs" />
+    <Compile Include="Rx3ImageHeader.cs" />
+    <Compile Include="Rx3IndexArray.cs" />
+    <Compile Include="Rx3ModelDirectory.cs" />
+    <Compile Include="Rx3ModelHeader.cs" />
+    <Compile Include="Rx3RawData.cs" />
+    <Compile Include="Rx3Signatures.cs" />
+    <Compile Include="Rx3Vertex.cs" />
+    <Compile Include="Rx3VertexArray.cs" />
+    <Compile Include="SameName.cs" />
+    <Compile Include="SameNameList.cs" />
+    <Compile Include="SbrFile.cs" />
+    <Compile Include="Schedule.cs" />
+    <Compile Include="ScheduleArray.cs" />
+    <Compile Include="ScheduleComparer.cs" />
+    <Compile Include="Shoes.cs" />
+    <Compile Include="ShoesList.cs" />
+    <Compile Include="SpecificHead.cs" />
+    <Compile Include="SpecificHeadList.cs" />
+    <Compile Include="Stadium.cs" />
+    <Compile Include="StadiumList.cs" />
+    <Compile Include="Stage.cs" />
+    <Compile Include="StageList.cs" />
+    <Compile Include="Table.cs" />
+    <Compile Include="TableDescriptor.cs" />
+    <Compile Include="Task.cs" />
+    <Compile Include="Team.cs" />
+    <Compile Include="TeamList.cs" />
+    <Compile Include="TeamNews.cs" />
+    <Compile Include="TeamPlayer.cs" />
+    <Compile Include="TI.cs" />
+    <Compile Include="Trophy.cs" />
+    <Compile Include="TrophyList.cs" />
+    <Compile Include="UgcDirEntry.cs" />
+    <Compile Include="UgcFile.cs" />
+    <Compile Include="UserMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserMessage.Designer.cs">
+      <DependentUpon>UserMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserOptions.Designer.cs">
+      <DependentUpon>UserOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vector3x1.cs" />
+    <Compile Include="WebGrabber.cs" />
+    <Compile Include="World.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UserMessage.resources" />
+    <EmbeddedResource Include="UserOptions.resources" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
