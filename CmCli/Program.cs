@@ -103,6 +103,15 @@ namespace CmCli
                         ExportCrests(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
                         break;
 
+                    case "export-player":
+                        if (args.Length < 6)
+                        {
+                            Console.WriteLine("Usage: CmCli.exe export-player <db_path> <xml_path> <fifa_dir> <player_id> <output_dir>");
+                            Environment.Exit(1);
+                        }
+                        ExportPlayer(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
+                        break;
+
                     default:
                         Console.WriteLine($"ERROR: Unknown command: {command}");
                         PrintUsage();
@@ -132,6 +141,7 @@ namespace CmCli
             Console.WriteLine("  import-all <db_path> <xml_path> <input_dir> <output_db_path>          Imports all tables from a directory and saves DB");
             Console.WriteLine("  export-kit <db_path> <xml_path> <fifa_dir> <team_id> <output_dir>    Exports team kits (PNG) from FIFA 16 directory");
             Console.WriteLine("  export-crests <db_path> <xml_path> <fifa_dir> <team_id> <output_dir> Exports team logos/crests (PNG) from FIFA 16 directory");
+            Console.WriteLine("  export-player <db_path> <xml_path> <fifa_dir> <player_id> <out_dir>  Exports player face, hair, and eyes textures (PNG)");
         }
 
         static void ListTables(string dbPath, string xmlPath)
@@ -498,6 +508,80 @@ namespace CmCli
                 crest.Save(file, System.Drawing.Imaging.ImageFormat.Png);
                 Console.WriteLine($"Saved crest: {file}");
             }
+        }
+
+        static void ExportPlayer(string dbPath, string xmlPath, string fifaDir, int playerId, string outputDir)
+        {
+            Console.WriteLine("Initializing FifaEnvironment...");
+            FifaEnvironment.Initialize(16, fifaDir);
+            FifaEnvironment.FifaDbFileName = dbPath;
+            FifaEnvironment.FifaXmlFileName = xmlPath;
+            
+            Console.WriteLine("Opening FAT archives...");
+            FifaEnvironment.OpenFat();
+            
+            Console.WriteLine("Opening Database...");
+            if (!FifaEnvironment.OpenFifaDb())
+            {
+                Console.WriteLine("ERROR: Failed to open FIFA database.");
+                return;
+            }
+            
+            if (!Directory.Exists(outputDir))
+            {
+                Directory.CreateDirectory(outputDir);
+            }
+            
+            Console.WriteLine($"Searching for player {playerId}...");
+            Player player = (Player)FifaEnvironment.Players.SearchId(playerId);
+            if (player == null)
+            {
+                Console.WriteLine($"ERROR: Player with ID {playerId} not found.");
+                return;
+            }
+            
+            Console.WriteLine($"Found Player: {player.firstname} {player.lastname} (ID: {player.Id})");
+            
+            // 1. Face Textures
+            Bitmap[] faces = player.GetFaceTextures();
+            if (faces != null)
+            {
+                for (int i = 0; i < faces.Length; i++)
+                {
+                    if (faces[i] != null)
+                    {
+                        string file = Path.Combine(outputDir, $"player_{playerId}_face_{i}.png");
+                        faces[i].Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        Console.WriteLine($"Saved face texture: {file}");
+                    }
+                }
+            }
+            
+            // 2. Hair Textures
+            Bitmap[] hairs = player.GetHairTextures();
+            if (hairs != null)
+            {
+                for (int i = 0; i < hairs.Length; i++)
+                {
+                    if (hairs[i] != null)
+                    {
+                        string file = Path.Combine(outputDir, $"player_{playerId}_hair_{i}.png");
+                        hairs[i].Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        Console.WriteLine($"Saved hair texture: {file}");
+                    }
+                }
+            }
+            
+            // 3. Eyes Texture
+            Bitmap eyes = player.GetEyesTexture();
+            if (eyes != null)
+            {
+                string file = Path.Combine(outputDir, $"player_{playerId}_eyes.png");
+                eyes.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                Console.WriteLine($"Saved eyes texture: {file}");
+            }
+
+            Console.WriteLine("Player export completed successfully.");
         }
     }
 }
