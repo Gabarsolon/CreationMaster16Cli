@@ -303,6 +303,7 @@ namespace FifaLibrary
 		// Token: 0x0600029C RID: 668 RVA: 0x0000AC34 File Offset: 0x00008E34
 		public bool SaveDb(string fileName)
 		{
+			this.m_FileName = fileName;
 			FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
 			DbWriter dbWriter = new DbWriter(fileStream, this.m_Platform);
 			this.SaveDb(dbWriter);

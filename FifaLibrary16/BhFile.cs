@@ -58,8 +58,17 @@ namespace FifaLibrary
 		// Token: 0x06000141 RID: 321 RVA: 0x00005038 File Offset: 0x00003238
 		public bool Load(FifaBigFile bigFile, bool hideExternalFiles)
 		{
+			return this.Load(bigFile, hideExternalFiles, null);
+		}
+
+		public bool Load(FifaBigFile bigFile, bool hideExternalFiles, string gameRootDir)
+		{
 			string text;
-			if (FifaEnvironment.Year == 14)
+			if (!string.IsNullOrEmpty(gameRootDir))
+			{
+				text = gameRootDir.TrimEnd('\\', '/') + "\\";
+			}
+			else if (FifaEnvironment.Year == 14)
 			{
 				int num = bigFile.PhysicalName.IndexOf("\\Game\\", 0, StringComparison.InvariantCultureIgnoreCase);
 				if (num >= 0)
@@ -114,7 +123,9 @@ namespace FifaLibrary
 				}
 				string name = bigFile.Headers[i].Name;
 				this.m_BhFileReference[i] = new BhFileReference(startPosition, size, num2, name);
-				if (hideExternalFiles && File.Exists(text + name))
+				string checkPath1 = text + name;
+				string checkPath2 = Path.Combine(text, name.Replace('/', '\\'));
+				if (hideExternalFiles && (File.Exists(checkPath1) || File.Exists(checkPath2)))
 				{
 					this.m_BhFileReference[i].Hide();
 				}
@@ -165,9 +176,24 @@ namespace FifaLibrary
 		}
 
 		// Token: 0x06000147 RID: 327 RVA: 0x000052A8 File Offset: 0x000034A8
-		public BhFile(FifaBigFile bigFile, bool hideExternalFiles)
+		public BhFile(FifaBigFile bigFile, bool hideExternalFiles, string gameRootDir = null)
 		{
-			this.Load(bigFile, hideExternalFiles);
+			this.Load(bigFile, hideExternalFiles, gameRootDir);
+		}
+
+		public string BhName => this.m_BhName;
+		public int HiddenFilesCount
+		{
+			get
+			{
+				if (this.m_BhFileReference == null) return 0;
+				int count = 0;
+				for (int i = 0; i < this.m_NFiles; i++)
+				{
+					if (this.m_BhFileReference[i] != null && this.m_BhFileReference[i].IsHidden()) count++;
+				}
+				return count;
+			}
 		}
 
 		// Token: 0x06000148 RID: 328 RVA: 0x000052B9 File Offset: 0x000034B9
@@ -192,21 +218,21 @@ namespace FifaLibrary
 		}
 
 		// Token: 0x0600014A RID: 330 RVA: 0x000052FD File Offset: 0x000034FD
-		public static void Regenerate(FifaBigFile bigFile, bool hideExternalFiles)
+		public static bool Regenerate(FifaBigFile bigFile, bool hideExternalFiles, string gameRootDir = null)
 		{
-			new BhFile(bigFile, hideExternalFiles).Save();
+			return new BhFile(bigFile, hideExternalFiles, gameRootDir).Save();
 		}
 
 		// Token: 0x0600014B RID: 331 RVA: 0x0000530C File Offset: 0x0000350C
-		public static void Regenerate(string bigFileName, bool hideExternalFiles)
+		public static bool Regenerate(string bigFileName, bool hideExternalFiles, string gameRootDir = null)
 		{
 			FifaBigFile fifaBigFile = new FifaBigFile(bigFileName);
 			if (fifaBigFile == null)
 			{
-				return;
+				return false;
 			}
 			fifaBigFile.LoadArchivedFiles();
-			BhFile.Regenerate(fifaBigFile, hideExternalFiles);
+			return BhFile.Regenerate(fifaBigFile, hideExternalFiles, gameRootDir);
 		}
 
 		// Token: 0x0600014C RID: 332 RVA: 0x00005334 File Offset: 0x00003534
@@ -216,6 +242,15 @@ namespace FifaLibrary
 			if (this.m_BhName == null)
 			{
 				return false;
+			}
+			if (File.Exists(bhName))
+			{
+				try
+				{
+					string bakName = bhName + ".bak";
+					File.Copy(bhName, bakName, true);
+				}
+				catch { }
 			}
 			if (File.Exists(bhName) && (File.GetAttributes(bhName) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
 			{

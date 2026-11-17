@@ -11,13 +11,33 @@ namespace CmCli
     {
         static void Main(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length == 0)
             {
                 PrintUsage();
                 Environment.Exit(1);
             }
 
             string command = args[0].ToLowerInvariant();
+            if (command == "regenerate-bh")
+            {
+                if (args.Length < 2)
+                {
+                    Console.WriteLine("Usage: CmCli.exe regenerate-bh <fifa_dir_or_big_file>");
+                    Console.WriteLine("       CmCli.exe regenerate-bh <db_path> <xml_path> <fifa_dir>");
+                    Environment.Exit(1);
+                }
+
+                string target = (args.Length >= 4 && (args[1].EndsWith(".db", StringComparison.OrdinalIgnoreCase) || args[1].EndsWith(".DB", StringComparison.OrdinalIgnoreCase))) ? args[3] : args[1];
+                RegenerateBhCmd(target);
+                return;
+            }
+
+            if (args.Length < 3)
+            {
+                PrintUsage();
+                Environment.Exit(1);
+            }
+
             string dbPath = args[1];
             string xmlPath = args[2];
 
@@ -131,8 +151,10 @@ namespace CmCli
         {
             Console.WriteLine("CmCli - Command Line Interface for FIFA Creation Master 16");
             Console.WriteLine("Usage: CmCli.exe <command> <db_path> <xml_path> [options]");
+            Console.WriteLine("       CmCli.exe regenerate-bh <fifa_dir_or_big_file>");
             Console.WriteLine();
             Console.WriteLine("Commands:");
+            Console.WriteLine("  regenerate-bh <fifa_dir_or_big_file>                                 Regenerates .bh files for FIFA 16 installation or archive");
             Console.WriteLine("  list-tables <db_path> <xml_path>                                     Lists all tables in the database");
             Console.WriteLine("  table-info <db_path> <xml_path> <table_name>                         Prints schema and count details for a table");
             Console.WriteLine("  export-table <db_path> <xml_path> <table_name> <output_file>         Exports a table to a tab-separated text file");
@@ -142,6 +164,151 @@ namespace CmCli
             Console.WriteLine("  export-kit <db_path> <xml_path> <fifa_dir> <team_id> <output_dir>    Exports team kits (PNG) from FIFA 16 directory");
             Console.WriteLine("  export-crests <db_path> <xml_path> <fifa_dir> <team_id> <output_dir> Exports team logos/crests (PNG) from FIFA 16 directory");
             Console.WriteLine("  export-player <db_path> <xml_path> <fifa_dir> <player_id> <out_dir>  Exports player face, hair, and eyes textures (PNG)");
+        }
+
+        static void RegenerateBhCmd(string targetPath)
+        {
+            try
+            {
+                if (File.Exists(targetPath))
+                {
+                    string bigPath = targetPath;
+                    if (targetPath.EndsWith(".bh", StringComparison.OrdinalIgnoreCase))
+                    {
+                        bigPath = Path.ChangeExtension(targetPath, ".big");
+                    }
+                    if (!File.Exists(bigPath))
+                    {
+                        Console.WriteLine($"ERROR: Matching BIG file not found: {bigPath}");
+                        Environment.Exit(1);
+                    }
+
+                    string gameRoot = Path.GetDirectoryName(bigPath);
+                    int num = bigPath.IndexOf("\\FIFA 16\\", 0, StringComparison.InvariantCultureIgnoreCase);
+                    if (num >= 0)
+                    {
+                        gameRoot = bigPath.Substring(0, num + 8);
+                    }
+
+                    Console.WriteLine($"Regenerating BH for single archive: {bigPath}");
+                    if (!RegenerateSingleBh(bigPath, gameRoot, out int hiddenCount))
+                    {
+                        Console.WriteLine($"ERROR: Failed to regenerate BH for {bigPath}");
+                        Environment.Exit(1);
+                    }
+                    Console.WriteLine("BH regeneration completed successfully.");
+                }
+                else if (Directory.Exists(targetPath))
+                {
+                    Console.WriteLine($"Scanning FIFA 16 installation at: {targetPath}");
+                    var bigFiles = new System.Collections.Generic.List<string>();
+
+                    foreach (string file in Directory.GetFiles(targetPath, "*.big", SearchOption.TopDirectoryOnly))
+                    {
+                        bigFiles.Add(file);
+                    }
+
+                    string[] subDirs = new string[]
+                    {
+                        Path.Combine(targetPath, "data", "ui", "imgAssets", "heads"),
+                        Path.Combine(targetPath, "data", "ui", "imgAssets", "youthheads")
+                    };
+                    foreach (string dir in subDirs)
+                    {
+                        if (Directory.Exists(dir))
+                        {
+                            foreach (string file in Directory.GetFiles(dir, "*.big"))
+                            {
+                                if (!bigFiles.Contains(file))
+                                {
+                                    bigFiles.Add(file);
+                                }
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        foreach (string bhFile in Directory.GetFiles(targetPath, "*.bh", SearchOption.AllDirectories))
+                        {
+                            string matchingBig = Path.ChangeExtension(bhFile, ".big");
+                            if (File.Exists(matchingBig) && !bigFiles.Contains(matchingBig))
+                            {
+                                bigFiles.Add(matchingBig);
+                            }
+                        }
+                    }
+                    catch { }
+
+                    if (bigFiles.Count == 0)
+                    {
+                        Console.WriteLine($"ERROR: No .big files found to regenerate in {targetPath}");
+                        Environment.Exit(1);
+                    }
+
+                    Console.WriteLine($"Found {bigFiles.Count} BIG archives to regenerate.");
+                    int successCount = 0;
+                    int totalHidden = 0;
+
+                    foreach (string big in bigFiles)
+                    {
+                        if (RegenerateSingleBh(big, targetPath, out int hidden))
+                        {
+                            successCount++;
+                            totalHidden += hidden;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"ERROR: Failed to regenerate BH for: {big}");
+                            Environment.Exit(1);
+                        }
+                    }
+
+                    Console.WriteLine($"Successfully regenerated {successCount} / {bigFiles.Count} BH files (total {totalHidden} loose files redirected).");
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: Target path does not exist: {targetPath}");
+                    Environment.Exit(1);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR: BH regeneration failed: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                Environment.Exit(1);
+            }
+        }
+
+        static bool RegenerateSingleBh(string bigPath, string gameRoot, out int hiddenCount)
+        {
+            hiddenCount = 0;
+            try
+            {
+                string bhPath = Path.ChangeExtension(bigPath, ".bh");
+                if (File.Exists(bhPath))
+                {
+                    string bakPath = bhPath + ".bak";
+                    File.Copy(bhPath, bakPath, true);
+                }
+
+                FifaBigFile bigFile = new FifaBigFile(bigPath);
+                bigFile.LoadArchivedFiles();
+
+                BhFile bh = new BhFile(bigFile, hideExternalFiles: true, gameRootDir: gameRoot);
+                if (!bh.Save())
+                {
+                    return false;
+                }
+                hiddenCount = bh.HiddenFilesCount;
+                Console.WriteLine($"  [OK] {Path.GetFileName(bhPath)} ({bh.NFiles} entries, {hiddenCount} loose files redirected)");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"  [FAIL] {Path.GetFileName(bigPath)}: {ex.Message}");
+                return false;
+            }
         }
 
         static void ListTables(string dbPath, string xmlPath)
