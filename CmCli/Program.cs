@@ -574,6 +574,10 @@ namespace CmCli
                 return;
             }
             
+            // Tournament/competition objects are skipped on purpose: CompobjList.CollectDescriptions
+            // throws on FIFA 16 + FRLT and they are not needed to export kits, crests or faces.
+            FifaEnvironment.LoadLists(EFifaObjects.FifaAdboard | EFifaObjects.FifaBall | EFifaObjects.FifaColor | EFifaObjects.FifaCountry | EFifaObjects.FifaFormation | EFifaObjects.FifaGrass | EFifaObjects.FifaJerseyFont | EFifaObjects.FifaKit | EFifaObjects.FifaLeague | EFifaObjects.FifaNet | EFifaObjects.FifaPlayer | EFifaObjects.FifaReferee | EFifaObjects.FifaRole | EFifaObjects.FifaShoes | EFifaObjects.FifaShortsFont | EFifaObjects.FifaSponsor | EFifaObjects.FifaStadium | EFifaObjects.FifaTeam | EFifaObjects.FifaReward | EFifaObjects.FifaMowingPattern | EFifaObjects.FifaWeather);
+            
             if (!Directory.Exists(outputDir))
             {
                 Directory.CreateDirectory(outputDir);
@@ -637,6 +641,10 @@ namespace CmCli
                 return;
             }
             
+            // Tournament/competition objects are skipped on purpose: CompobjList.CollectDescriptions
+            // throws on FIFA 16 + FRLT and they are not needed to export kits, crests or faces.
+            FifaEnvironment.LoadLists(EFifaObjects.FifaAdboard | EFifaObjects.FifaBall | EFifaObjects.FifaColor | EFifaObjects.FifaCountry | EFifaObjects.FifaFormation | EFifaObjects.FifaGrass | EFifaObjects.FifaJerseyFont | EFifaObjects.FifaKit | EFifaObjects.FifaLeague | EFifaObjects.FifaNet | EFifaObjects.FifaPlayer | EFifaObjects.FifaReferee | EFifaObjects.FifaRole | EFifaObjects.FifaShoes | EFifaObjects.FifaShortsFont | EFifaObjects.FifaSponsor | EFifaObjects.FifaStadium | EFifaObjects.FifaTeam | EFifaObjects.FifaReward | EFifaObjects.FifaMowingPattern | EFifaObjects.FifaWeather);
+            
             if (!Directory.Exists(outputDir))
             {
                 Directory.CreateDirectory(outputDir);
@@ -693,6 +701,10 @@ namespace CmCli
                 Console.WriteLine("ERROR: Failed to open FIFA database.");
                 return;
             }
+            
+            // Tournament/competition objects are skipped on purpose: CompobjList.CollectDescriptions
+            // throws on FIFA 16 + FRLT and they are not needed to export kits, crests or faces.
+            FifaEnvironment.LoadLists(EFifaObjects.FifaAdboard | EFifaObjects.FifaBall | EFifaObjects.FifaColor | EFifaObjects.FifaCountry | EFifaObjects.FifaFormation | EFifaObjects.FifaGrass | EFifaObjects.FifaJerseyFont | EFifaObjects.FifaKit | EFifaObjects.FifaLeague | EFifaObjects.FifaNet | EFifaObjects.FifaPlayer | EFifaObjects.FifaReferee | EFifaObjects.FifaRole | EFifaObjects.FifaShoes | EFifaObjects.FifaShortsFont | EFifaObjects.FifaSponsor | EFifaObjects.FifaStadium | EFifaObjects.FifaTeam | EFifaObjects.FifaReward | EFifaObjects.FifaMowingPattern | EFifaObjects.FifaWeather);
             
             if (!Directory.Exists(outputDir))
             {
