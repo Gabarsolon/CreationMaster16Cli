@@ -123,6 +123,15 @@ namespace CmCli
                         ExportCrests(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
                         break;
 
+                    case "export-photo":
+                        if (args.Length < 6)
+                        {
+                            Console.WriteLine("Usage: CmCli.exe export-photo <db_path> <xml_path> <fifa_dir> <player_id> <output_dir>");
+                            Environment.Exit(1);
+                        }
+                        ExportPhoto(dbPath, xmlPath, args[3], int.Parse(args[4]), args[5]);
+                        break;
+
                     case "export-player":
                         if (args.Length < 6)
                         {
@@ -164,6 +173,7 @@ namespace CmCli
             Console.WriteLine("  export-kit <db_path> <xml_path> <fifa_dir> <team_id> <output_dir>    Exports team kits (PNG) from FIFA 16 directory");
             Console.WriteLine("  export-crests <db_path> <xml_path> <fifa_dir> <team_id> <output_dir> Exports team logos/crests (PNG) from FIFA 16 directory");
             Console.WriteLine("  export-player <db_path> <xml_path> <fifa_dir> <player_id> <out_dir>  Exports player face, hair, and eyes textures (PNG)");
+            Console.WriteLine("  export-photo <db_path> <xml_path> <fifa_dir> <player_id> <out_dir>    Exports the 2D head photo (miniface) as p<id>.png");
         }
 
         static void RegenerateBhCmd(string targetPath)
@@ -683,6 +693,38 @@ namespace CmCli
                 crest.Save(file, System.Drawing.Imaging.ImageFormat.Png);
                 Console.WriteLine($"Saved crest: {file}");
             }
+        }
+
+        // Exports the 2D head photo (data/ui/imgassets/heads/p<id>.dds, the "miniface") as p<id>.png.
+        // Exit code 2 when the player has no specific photo.
+        static void ExportPhoto(string dbPath, string xmlPath, string fifaDir, int playerId, string outputDir)
+        {
+            FifaEnvironment.Initialize(16, fifaDir);
+            FifaEnvironment.FifaDbFileName = dbPath;
+            FifaEnvironment.FifaXmlFileName = xmlPath;
+            FifaEnvironment.OpenFat();
+            if (!FifaEnvironment.OpenFifaDb())
+            {
+                Console.WriteLine("ERROR: Failed to open FIFA database.");
+                Environment.Exit(1);
+            }
+            FifaEnvironment.LoadLists(EFifaObjects.FifaCountry | EFifaObjects.FifaTeam | EFifaObjects.FifaPlayer);
+            Directory.CreateDirectory(outputDir);
+            Player player = (Player)FifaEnvironment.Players.SearchId(playerId);
+            if (player == null)
+            {
+                Console.WriteLine($"ERROR: Player with ID {playerId} not found.");
+                Environment.Exit(1);
+            }
+            Bitmap photo = player.GetPhoto();
+            if (photo == null)
+            {
+                Console.WriteLine($"No photo for player {playerId}");
+                Environment.Exit(2);
+            }
+            string file = Path.Combine(outputDir, $"p{playerId}.png");
+            photo.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+            Console.WriteLine($"Saved photo: {file}");
         }
 
         static void ExportPlayer(string dbPath, string xmlPath, string fifaDir, int playerId, string outputDir)
