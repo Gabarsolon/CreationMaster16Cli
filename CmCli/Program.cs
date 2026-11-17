@@ -18,6 +18,18 @@ namespace CmCli
             }
 
             string command = args[0].ToLowerInvariant();
+            if (command == "export-obj")
+            {
+                if (args.Length < 3)
+                {
+                    Console.WriteLine("Usage: CmCli.exe export-obj <file.rx3> <out.obj> [float32]");
+                    Environment.Exit(1);
+                }
+                Rx3Vertex.FloatType = (args.Length >= 4 && args[3].ToLowerInvariant() == "float32") ? Rx3Vertex.EFloatType.Float32 : Rx3Vertex.EFloatType.Float16;
+                ExportRx3Obj(args[1], args[2]);
+                return;
+            }
+
             if (command == "regenerate-bh")
             {
                 if (args.Length < 2)
@@ -725,6 +737,62 @@ namespace CmCli
             string file = Path.Combine(outputDir, $"p{playerId}.png");
             photo.Save(file, System.Drawing.Imaging.ImageFormat.Png);
             Console.WriteLine($"Saved photo: {file}");
+        }
+
+        // Dumps every vertex/index array of an .rx3 model to a Wavefront OBJ (positions + UVs, triangle lists).
+        static void ExportRx3Obj(string rx3Path, string objPath)
+        {
+            Rx3File rx3 = new Rx3File();
+            if (!rx3.Load(rx3Path))
+            {
+                Console.WriteLine("ERROR: cannot load " + rx3Path);
+                Environment.Exit(1);
+            }
+            var va = rx3.Rx3VertexArrays;
+            var ia = rx3.Rx3IndexArrays;
+            Console.WriteLine($"vertex arrays: {(va == null ? 0 : va.Length)}, index arrays: {(ia == null ? 0 : ia.Length)}");
+            using (var w = new StreamWriter(objPath))
+            {
+                int baseIndex = 1;
+                for (int a = 0; va != null && a < va.Length; a++)
+                {
+                    var verts = va[a].Vertexes;
+                    Console.WriteLine($"  array {a}: {va[a].nVertex} vertices, vertexSize {va[a].VertexSize}");
+                    w.WriteLine("o mesh" + a);
+                    foreach (var v in verts)
+                    {
+                        w.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "v {0} {1} {2}", v.X, v.Y, v.Z));
+                    }
+                    foreach (var v in verts)
+                    {
+                        w.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "vt {0} {1}", v.U, 1 - v.V));
+                    }
+                    if (ia != null && a < ia.Length)
+                    {
+                        short[] idx = ia[a].IndexStream;
+                        Console.WriteLine($"  index array {a}: {ia[a].NIndex} indices, triangleList={ia[a].IsTriangleList}");
+                        if (ia[a].IsTriangleList)
+                        {
+                            for (int i = 0; i + 2 < idx.Length; i += 3)
+                            {
+                                w.WriteLine($"f {baseIndex + (ushort)idx[i]}/{baseIndex + (ushort)idx[i]} {baseIndex + (ushort)idx[i + 1]}/{baseIndex + (ushort)idx[i + 1]} {baseIndex + (ushort)idx[i + 2]}/{baseIndex + (ushort)idx[i + 2]}");
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i + 2 < idx.Length; i++)
+                            {
+                                int p0 = (ushort)idx[i], p1 = (ushort)idx[i + 1], p2 = (ushort)idx[i + 2];
+                                if (p0 == p1 || p1 == p2 || p0 == p2) continue;
+                                if ((i & 1) == 0) w.WriteLine($"f {baseIndex + p0} {baseIndex + p1} {baseIndex + p2}");
+                                else w.WriteLine($"f {baseIndex + p1} {baseIndex + p0} {baseIndex + p2}");
+                            }
+                        }
+                    }
+                    baseIndex += verts.Length;
+                }
+            }
+            Console.WriteLine("Saved: " + objPath);
         }
 
         static void ExportPlayer(string dbPath, string xmlPath, string fifaDir, int playerId, string outputDir)
